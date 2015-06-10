@@ -1,0 +1,42 @@
+#include <opencv2/opencv.hpp>
+#include <istream>
+#include <string>
+#include <math.h>
+
+using namespace std;
+using namespace cv;
+
+int main()
+{
+	char k[100];
+	cout << "请输入图片：" << endl;
+	cin.getline(k, 100);
+	Mat img1 = imread(k);
+	if (img1.empty())
+	{
+		cout << "error!" << endl;
+		return -1;
+	}
+	int a = img1.rows;
+	int b = img1.cols;
+	int c;
+	float e=0,g;
+	Mat m = Mat::zeros(1, 256, CV_32FC1);
+	for (int i = 0; i < a; i++)
+	{
+		for (int j = 0; j < b; j++)
+		{
+			c = img1.at<uchar>(i, j);
+			m.at<float>(0, c) = m.at<float>(0, c) + 1;
+		}
+	}
+	for (int i = 0; i < 256; i++)
+	{
+		 g= m.at<float>(0, i) / a / b;
+		 e = e + g*log2(g);	 
+	}
+	e = -e;
+	cout << "first order entropy=" << e << endl;
+	waitKey();
+	return 0;
+}
